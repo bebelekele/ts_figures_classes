@@ -1,5 +1,4 @@
 export interface Figure {
-  a: number;
   shape: string;
   color: string;
   getArea(): number;
@@ -8,7 +7,7 @@ export interface Figure {
 export class Triangle implements Figure {
   public shape: string = 'triangle';
 
-  public square: number;
+  public colors: string[] = ['red', 'green', 'blue'];
 
   getArea(): number {
     const s = (this.a + this.b + this.c) / 2;
@@ -23,63 +22,75 @@ export class Triangle implements Figure {
     public b: number,
     public c: number,
   ) {
-    this.square = this.getArea();
+    if (!this.colors.includes(color)) {
+      throw new Error('"Color must be red, green, or blue');
+    }
 
-    if (this.square <= 0) {
-      throw new Error('your message');
+    const [x, y, z] = [a, b, c].sort((m, n) => m - n);
+
+    if (x <= 0 || y <= 0 || z <= 0) {
+      throw new Error(
+        `Invalid sides: all sides must be > 0 (got a=${a}, b=${b}, c=${c}).`,
+      );
+    }
+
+    if (z >= x + y) {
+      throw new Error('Triangle inequality violated');
     }
   }
 }
 
 export class Circle implements Figure {
-  public square: number;
-
   public shape: string = 'circle';
 
+  public colors: string[] = ['red', 'green', 'blue'];
+
   getArea(): number {
-    const area = Math.PI * this.a ** 2;
+    const area = Math.PI * this.radius ** 2;
 
     return Math.floor(area * 100) / 100;
   }
 
   constructor(
     public color: string,
-    public a: number,
+    public radius: number,
   ) {
-    if (this.a <= 0) {
-      throw new Error('your message');
+    if (!this.colors.includes(color)) {
+      throw new Error('Color must be red, green, or blue');
     }
 
-    this.square = this.getArea();
-
-    if (this.square <= 0) {
-      throw new Error('your message');
+    if (this.radius <= 0) {
+      throw new Error('Radius must be greater than 0');
     }
   }
 }
 
 export class Rectangle implements Figure {
-  public square: number;
-
   public shape: string = 'rectangle';
 
+  public colors: string[] = ['red', 'green', 'blue'];
+
   getArea(): number {
-    return this.a * this.b;
+    const area = this.width * this.height;
+
+    return Math.floor(area * 100) / 100;
   }
 
   constructor(
     public color: string,
-    public a: number,
-    public b: number,
+    public width: number,
+    public height: number,
   ) {
-    this.square = this.getArea();
+    if (!this.colors.includes(color)) {
+      throw new Error('"Color must be red, green, or blue');
+    }
 
-    if (this.square <= 0) {
+    if (this.getArea() <= 0) {
       throw new Error('your message');
     }
   }
 }
 
 export function getInfo(figure: Triangle | Rectangle | Circle): string {
-  return `A ${figure.color} ${figure.shape} - ${figure.square}`;
+  return `A ${figure.color} ${figure.shape} - ${figure.getArea()}`;
 }
