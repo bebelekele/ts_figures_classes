@@ -23,7 +23,7 @@ export class Triangle implements Figure {
     public c: number,
   ) {
     if (!this.colors.includes(color)) {
-      throw new Error('"Color must be red, green, or blue');
+      throw new Error(`Color must be 'red', 'green', or 'blue'`);
     }
 
     const [x, y, z] = [a, b, c].sort((m, n) => m - n);
@@ -35,7 +35,9 @@ export class Triangle implements Figure {
     }
 
     if (z >= x + y) {
-      throw new Error('Triangle inequality violated');
+      throw new Error(
+        `Triangle inequality violated: the longest side ${z} must be less than the sum of the other two sides ${x} + ${y}`,
+      );
     }
   }
 }
@@ -85,8 +87,10 @@ export class Rectangle implements Figure {
       throw new Error('"Color must be red, green, or blue');
     }
 
-    if (this.getArea() <= 0) {
-      throw new Error('your message');
+    if (width <= 0 || height <= 0) {
+      throw new Error(
+        `Width and height must be greater than 0 (got width=${width}, height=${height})`,
+      );
     }
   }
 }
